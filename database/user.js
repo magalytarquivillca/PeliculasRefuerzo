@@ -2,7 +2,7 @@ var mongoose = require("./connect");
 var USERSCHEMA = new mongoose.Schema({
     nick: {
         type: String,
-        required: [true, "El nickname es necesario"]
+        required: [true, "El name es necesario"]
     },
     foto: {
         type: String,
@@ -10,7 +10,7 @@ var USERSCHEMA = new mongoose.Schema({
     },
     email: {
         type: String,
-        required: [true, "El email es necesario"],
+        required: [true, " email es obligatorio"],
         validate: {
             validator: (value) => {
                 return /^[\w\.]+@[\w\.]+\.\w{3,3}$/.test(value);
@@ -21,7 +21,7 @@ var USERSCHEMA = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: [true, "El password es necesario"],
+        required: [true, "password obligatorio"],
     },
    
 });
