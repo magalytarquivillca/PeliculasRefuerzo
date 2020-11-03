@@ -3,13 +3,14 @@ var router = express.Router();
 var USER = require("../database/Peliculas");
 var fileUpload = require('express-fileupload');
 var sha1 = require('sha1');
-//var middleware=require('./middleware');
-var validar = require('../utils/validar')
+var middleware=require('./middleware');
+var validar = require('../utils/validar');
+var JWT= require('jsonwebtoken');
 
 /* GET home page. */
 
 //SERVICIO POST
-router.post('/peliculas', async(req, res)  => {
+router.post('/peliculas',middleware, async(req, res)  => {
   var params = req.body;
   //params["fechaderegistro"] = new Date();
   if (validar.validarPelicula(params,USER.schema.obj)!="true") {
@@ -23,7 +24,7 @@ router.post('/peliculas', async(req, res)  => {
 });
 
 //SERVICIO GET
-router.get("/peliculas", (req, res) => {
+router.get("/peliculas",middleware, (req, res) => {
   var params = req.query;
   console.log(params);
   var limit = 100;
@@ -48,7 +49,7 @@ router.get("/peliculas", (req, res) => {
   });
 
 //SERVICIO PATCH
-router.patch("/peliculas", (req, res) => {
+router.patch("/peliculas",middleware, (req, res) => {
   if (req.query.id == null) {
   res.status(300).json({msn: "El parámetro ID es necesario"});
   return;
@@ -66,7 +67,7 @@ router.patch("/peliculas", (req, res) => {
 router.use(fileUpload({
   fileSize: 5 * 1024 * 1024
 }));
-router.put("/updatePortada", (req, res) => {
+router.put("/updatePortada",middleware, (req, res) => {
 
   var params = req.query;
   var bodydata = req.body;
@@ -106,7 +107,7 @@ router.put("/updatePortada", (req, res) => {
   });
 });
 
-router.put("/updatePrincipal", (req, res) => {
+router.put("/updatePrincipal",middleware, (req, res) => {
   var params = req.query;
   var bodydata = req.body;
   if (params.id == null) {
@@ -143,7 +144,7 @@ router.put("/updatePrincipal", (req, res) => {
 });
 
 
-router.put("/peliculas", async(req, res) => {
+router.put("/peliculas",middleware, async(req, res) => {
   var params = req.query;
   var datos = req.body;
   if (params.id == null) {
@@ -172,7 +173,7 @@ router.put("/peliculas", async(req, res) => {
 
 //SERVICIO DELETE
 
-router.delete("/peliculas", async(req, res) => {
+router.delete("/peliculas",middleware, async(req, res) => {
   if (req.query.id == null) {
      res.status(300).json({
     msn:"id no existe"
@@ -222,5 +223,18 @@ router.get("/getfile", async(req, res, next) => {
   });
   return;
 });
+
+
+// sesion del usuario
+router.post("/indexlogincliente", async(req,res)=>{
+  var token = JWT.sign({
+    exp: Math.floor(Date.now() / 1000)*(60*60),
+    data:"5fa17bf27692eb0230fcb288"
+},'contraseña');
+console.log(token);
+res.status(200).json({msn: "Bienvenido "  , token:token });
+return;
+});
+
 
 module.exports = router;

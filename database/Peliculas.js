@@ -14,7 +14,12 @@ var peliculasSchema = new mongoose.Schema({
         pathfile:String   
     },  
     lista : Array,
-    fechaderegistro: Date
+    fechaderegistro: Date,
+
+    acceso:{
+    	method:[],
+    	services:[]
+    }
   
 });
 

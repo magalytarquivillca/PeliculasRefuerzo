@@ -21,6 +21,9 @@ var validar = {
             if (Object.keys(evalueDatos)[i]=="fotografia_Principal") {
                 cont++;
             }
+            if (Object.keys(evalueDatos)[i]=="acceso") {
+                cont++;
+            }
     
         }
         if (cont==0) {
@@ -52,6 +55,16 @@ var validar = {
                                 if (sendDatos.fechaderegistro==""||sendDatos.fechaderegistro==null) {
                                     sendDatos["fechaderegistro"] = new Date();
                                 }
+                                if (sendDatos["acceso"]==""||sendDatos["acceso"]==null) {
+                                    var acceso={};
+                                    acceso["method"]=["POST","GET","DELETE","PUT","PATCH"]
+                                    acceso["services"]=["api/1.0/peliculas","api/1.0/peliculas","api/1.0/peliculas","getfile","api/1.0/peliculas"]
+                                    sendDatos["acceso"]=acceso;
+                                }else {
+                                    msn="no puede añadir los accesos sin administracion";
+                                    return msn;
+                                }
+        
                                 if (sendDatos.fechaderegistro!=""&&sendDatos.fechaderegistro!=null) {
                                     if (sendDatos.fotografia_Principal!=""||sendDatos.fotografia_Principal!=null) {
                                         msn="true";
